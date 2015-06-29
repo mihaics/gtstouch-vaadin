@@ -8,4 +8,6 @@ public interface GTSMapView extends ApplicationView<GTSMapViewPresenter> {
 
     void setMessage(String message);
 
+    public void drawRoute();
+
 }

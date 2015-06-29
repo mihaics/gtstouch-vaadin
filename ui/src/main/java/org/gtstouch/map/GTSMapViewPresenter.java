@@ -16,7 +16,9 @@ class GTSMapViewPresenter extends AbstractPresenter<GTSMapView> {
 
     @Override
     protected void onViewEnter() {
-        getView().setMessage("GTSMapViewPresenter: " + new Date());
+
+        getView().drawRoute();
+
     }
 
 }

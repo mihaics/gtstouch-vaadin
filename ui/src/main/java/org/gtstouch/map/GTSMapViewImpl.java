@@ -5,6 +5,7 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.Notification;
 import java.util.Date;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -35,8 +36,9 @@ public class GTSMapViewImpl extends AbstractView<GTSMapViewPresenter> implements
 
     static final long DAY = 24 * 60 * 60 * 1000;
     static final long ONE_WEEK = 7 * DAY;
-    static final Date periodStart = new Date(2014 - 1900, 6 - 1, 15);
-    static final Date periodEnd = new Date(2014 - 1900, 10 - 1, 15);
+
+    static final Date periodEnd = new Date();
+    static final Date periodStart = new Date(periodEnd.getTime() - DAY);
 
     public GTSMapViewImpl() {
 
@@ -47,7 +49,7 @@ public class GTSMapViewImpl extends AbstractView<GTSMapViewPresenter> implements
 
         mapLayout.expand(map);
         setCompositionRoot(mapLayout);
-        drawRoute();
+
     }
 
     protected void prepareDateRangeSelector() throws Property.ReadOnlyException, Converter.ConversionException {
@@ -77,7 +79,10 @@ public class GTSMapViewImpl extends AbstractView<GTSMapViewPresenter> implements
         });
     }
 
-    private void drawRoute() {
+    public void drawRoute() {
+
+        Notification.show("Entering Map View, draw route", Notification.Type.TRAY_NOTIFICATION);
+
         /*   List<Update> updates = service.fetchUpdates(start.getValue(), end.
          getValue());
          if (!updates.isEmpty()) {

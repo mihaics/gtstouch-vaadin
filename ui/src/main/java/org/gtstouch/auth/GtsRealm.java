@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InitialContext;
@@ -25,23 +27,15 @@ import org.apache.shiro.util.JdbcUtils;
 
 public class GtsRealm extends JdbcRealm {
 
-    protected static final String DEFAULT_AUTHENTICATION_QUERY = "SELECT User.password FROM  User WHERE User.contactEmail = ?";
-
     /**
-     * The default query used to retrieve the roles that apply to a user.
+     * caută accountID pentru utilizator apoi verifică dacă contul este activ
+     * sau există (necesar datorită designului OPenGTS, pot exista useri fără
+     * cont)
      */
-    protected static final String DEFAULT_USER_ROLES_QUERY = "select User.roleID from User where User.contactEmail = ?";
+    protected String getAccountQuery;
+    protected String validAccountQuery;
 
-    protected String authenticationQuery = DEFAULT_AUTHENTICATION_QUERY;
-
-    protected String userRolesQuery = DEFAULT_USER_ROLES_QUERY;
-
-    protected String getAccountQuery = "select User.accountID from User where User.contactEmail = ?";
-    protected String validAccountQuery = "select Account.isActive from Account where accountID = ?";
-
-    protected boolean permissionsLookupEnabled = false;
-
-    Logger log = Logger.getLogger(GtsRealm.class.getName());
+    static final Logger log = Logger.getLogger(GtsRealm.class.getName());
 
     /**
      * jndiDataSourceName
@@ -51,6 +45,8 @@ public class GtsRealm extends JdbcRealm {
     public GtsRealm() {
 
         super();
+        this.validAccountQuery = "select Account.isActive from Account where accountID = ?";
+        this.getAccountQuery = "select User.accountID from User where User.contactEmail = ?";
 
     }
 
@@ -68,18 +64,26 @@ public class GtsRealm extends JdbcRealm {
             InitialContext ic = new InitialContext();
             return (DataSource) ic.lookup(jndiDataSourceName);
         } catch (NamingException e) {
-            log.info("JNDI error while retrieving " + jndiDataSourceName
-                    + " : " + e.getExplanation());
+            log.log(Level.INFO, "JNDI error while retrieving {0} : {1}", new Object[]{jndiDataSourceName, e.getExplanation()});
 
             throw new AuthorizationException(e);
         }
     }
 
+    /**
+     *
+     * @param token
+     * @return
+     * @throws AuthenticationException
+     */
+    @Override
     protected AuthenticationInfo doGetAuthenticationInfo(
             AuthenticationToken token) throws AuthenticationException {
 
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         String username = upToken.getUsername();
+        //char[] pw = upToken.getPassword();
+        //log.log(Level.INFO, "Token password: {0}", Arrays.toString(pw));
 
         // Null username is invalid
         if (username == null) {
@@ -111,7 +115,7 @@ public class GtsRealm extends JdbcRealm {
         } catch (SQLException e) {
             final String message = "There was a SQL error while authenticating user ["
                     + username + "]";
-            log.info(message + " : " + e.getMessage());
+            log.log(Level.INFO, "{0} : {1}", new Object[]{message, e.getMessage()});
 
             // Rethrow any SQL errors as an authentication exception
             throw new AuthenticationException(message, e);
@@ -229,6 +233,14 @@ public class GtsRealm extends JdbcRealm {
         return password;
     }
 
+    /**
+     *
+     * @param conn
+     * @param username
+     * @return
+     * @throws SQLException
+     */
+    @Override
     protected Set getRoleNamesForUser(Connection conn, String username)
             throws SQLException {
         PreparedStatement ps = null;
@@ -253,8 +265,7 @@ public class GtsRealm extends JdbcRealm {
                     roleNames.add(roleName);
                 } else {
                     // if (log.isDebugEnabled()) {
-                    log.info("Null role name found while retrieving role names for user ["
-                            + username + "]");
+                    log.log(Level.INFO, "Null role name found while retrieving role names for user [{0}]", username);
                     // }
                 }
             }
