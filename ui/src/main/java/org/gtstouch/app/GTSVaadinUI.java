@@ -10,6 +10,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Notification;
 import java.util.Date;
+import java.util.List;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
@@ -20,6 +21,7 @@ import org.gtstouch.jpa.UserService;
 import org.gtstouch.login.LoginView;
 import org.gtstouch.login.UserLoggedInEvent;
 import org.gtstouch.map.GTSMapView;
+import org.gtstouch.model.DevicePK;
 import org.gtstouch.model.UserPK;
 import org.vaadin.cdiviewmenu.ViewMenuUI;
 
@@ -31,7 +33,12 @@ public class GTSVaadinUI extends ViewMenuUI {
     UserService userService;
 
     private Button logout;
+    /*
+     * stores the userID and accountID for the session
+     */
     private UserPK userIndex;
+//stores an Index to the user devices in account
+    private List<DevicePK> deviceIndexes;
 
     private final Button.ClickListener logoutClickListener = new Button.ClickListener() {
         private static final long serialVersionUID = -1545988729141348821L;
@@ -117,6 +124,8 @@ public class GTSVaadinUI extends ViewMenuUI {
     private void getUserData(Subject subject) {
         String contactEmail = (String) subject.getPrincipal();
         userIndex = userService.getUserIndex(contactEmail);
+        deviceIndexes = userService.getActiveDevices(userIndex);
+        Notification.show("Got Devices: " + deviceIndexes.size(), Notification.Type.TRAY_NOTIFICATION);
     }
 
 }

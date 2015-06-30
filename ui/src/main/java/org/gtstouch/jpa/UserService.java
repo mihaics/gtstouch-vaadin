@@ -5,10 +5,12 @@
  */
 package org.gtstouch.jpa;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.gtstouch.model.DevicePK;
 import org.gtstouch.model.UserPK;
 
 /**
@@ -31,13 +33,17 @@ public class UserService {
         return rez;
 
     }
-    
-    
 
     public UserPK getUserIndex(String contactEmail) {
         Query q = em.createQuery("select DISTINCT u.userPK  from User u where u.contactEmail =:email ", UserPK.class);
         return (UserPK) q.setParameter("email", contactEmail).getSingleResult();
-        
+
+    }
+
+    public List getActiveDevices(UserPK userIndex) {
+        Query q = em.createQuery("select DISTINCT d.devicePK from Device d where d.devicePK.accountID =:accountID and d.isActive = 1", DevicePK.class);
+        q.setParameter("accountID", userIndex.getAccountID());
+        return q.getResultList();
     }
 
 }
