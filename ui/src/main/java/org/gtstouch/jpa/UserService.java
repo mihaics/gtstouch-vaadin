@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.gtstouch.model.UserPK;
 
 /**
  *
@@ -29,6 +30,14 @@ public class UserService {
         int rez = q.setParameter("email", contactEmail).executeUpdate();
         return rez;
 
+    }
+    
+    
+
+    public UserPK getUserIndex(String contactEmail) {
+        Query q = em.createQuery("select DISTINCT u.userPK  from User u where u.contactEmail =:email ", UserPK.class);
+        return (UserPK) q.setParameter("email", contactEmail).getSingleResult();
+        
     }
 
 }

@@ -20,6 +20,7 @@ import org.gtstouch.jpa.UserService;
 import org.gtstouch.login.LoginView;
 import org.gtstouch.login.UserLoggedInEvent;
 import org.gtstouch.map.GTSMapView;
+import org.gtstouch.model.UserPK;
 import org.vaadin.cdiviewmenu.ViewMenuUI;
 
 @CDIUI("")
@@ -30,6 +31,7 @@ public class GTSVaadinUI extends ViewMenuUI {
     UserService userService;
 
     private Button logout;
+    private UserPK userIndex;
 
     private final Button.ClickListener logoutClickListener = new Button.ClickListener() {
         private static final long serialVersionUID = -1545988729141348821L;
@@ -77,6 +79,7 @@ public class GTSVaadinUI extends ViewMenuUI {
         //boolean rez = subject.hasRole("test");
         Notification.show("Welcome back " + event.getUsername() + " / " + subject.getPrincipal().toString() + " / admin: " + subject.hasRole("admin"), Notification.Type.HUMANIZED_MESSAGE);
         updateLoginTime(subject);
+        getUserData(subject);
         getMenu().navigateTo(GTSMapView.ID);
         getMenu().addMenuItem(logout);
         getMenu().setVisible(isLoggedIn());
@@ -89,4 +92,31 @@ public class GTSVaadinUI extends ViewMenuUI {
         //Notification.show("Updated: " + contactEmail + " at " + time + " rezult: " + rez);
 
     }
+
+    public static GTSVaadinUI getApp() {
+        return (GTSVaadinUI) GTSVaadinUI.getCurrent();
+    }
+
+    public String getUserID() {
+        return userIndex.getUserID();
+    }
+
+    public String getAccountID() {
+
+        return userIndex.getAccountID();
+    }
+
+    public UserPK getUserIndex() {
+        return userIndex;
+    }
+
+    public void setUserIndex(UserPK userIndex) {
+        this.userIndex = userIndex;
+    }
+
+    private void getUserData(Subject subject) {
+        String contactEmail = (String) subject.getPrincipal();
+        userIndex = userService.getUserIndex(contactEmail);
+    }
+
 }

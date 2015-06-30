@@ -81,7 +81,7 @@ public class GTSMapViewImpl extends AbstractView<GTSMapViewPresenter> implements
 
     public void drawRoute() {
 
-        Notification.show("Entering Map View, draw route", Notification.Type.TRAY_NOTIFICATION);
+        //Notification.show("Entering Map View, draw route", Notification.Type.TRAY_NOTIFICATION);
 
         /*   List<Update> updates = service.fetchUpdates(start.getValue(), end.
          getValue());
