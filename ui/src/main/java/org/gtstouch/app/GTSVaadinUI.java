@@ -125,7 +125,7 @@ public class GTSVaadinUI extends ViewMenuUI {
         String contactEmail = (String) subject.getPrincipal();
         userIndex = userService.getUserIndex(contactEmail);
         deviceIndexes = userService.getActiveDevices(userIndex);
-        Notification.show("Got Devices: " + deviceIndexes.size(), Notification.Type.TRAY_NOTIFICATION);
+        //Notification.show("Got Devices: " + deviceIndexes.size(), Notification.Type.TRAY_NOTIFICATION);
     }
 
 }

@@ -4,8 +4,9 @@ import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.DateField;
-import com.vaadin.ui.Notification;
+import com.vaadin.ui.PopupDateField;
 import java.util.Date;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -20,7 +21,7 @@ import org.vaadin.viritin.layouts.MVerticalLayout;
 
 @CDIView(GTSMapView.ID)
 @ViewMenuItem(icon = FontAwesome.LIFE_BOUY)
-public class GTSMapViewImpl extends AbstractView<GTSMapViewPresenter> implements GTSMapView {
+public final class GTSMapViewImpl extends AbstractView<GTSMapViewPresenter> implements GTSMapView {
 
     @Inject
     private Instance<GTSMapViewPresenter> presenterInstance;
@@ -31,17 +32,18 @@ public class GTSMapViewImpl extends AbstractView<GTSMapViewPresenter> implements
     LMap map = new LMap();
     LPolyline snake;
 
-    DateField start = new DateField("From");
-    DateField end = new DateField("To");
+    PopupDateField start = new PopupDateField("From");
+    PopupDateField end = new PopupDateField("To");
 
     static final long DAY = 24 * 60 * 60 * 1000;
     static final long ONE_WEEK = 7 * DAY;
+    static final long ONE_HOUR = 60 * 60 * 1000;
 
     static final Date periodEnd = new Date();
-    static final Date periodStart = new Date(periodEnd.getTime() - DAY);
+    static final Date periodStart = new Date(2014, 1, 1);
 
     public GTSMapViewImpl() {
-
+        prepareDateRangeSelector();
         mapLayout.add(new MHorizontalLayout(start, end));
         map.addLayer(new LOpenStreetMapLayer());
         map.setCenter(46.27, 21.24);
@@ -53,12 +55,20 @@ public class GTSMapViewImpl extends AbstractView<GTSMapViewPresenter> implements
     }
 
     protected void prepareDateRangeSelector() throws Property.ReadOnlyException, Converter.ConversionException {
-        start.setRangeStart(periodStart);
+        start.setResolution(Resolution.MINUTE);
+        end.setResolution(Resolution.MINUTE);
+        /*
+         * set data range for component validation
+         */
+        // start.setRangeStart(periodStart);
         start.setRangeEnd(periodEnd);
-        end.setRangeStart(periodStart);
+        //  end.setRangeStart(periodStart);
         end.setRangeEnd(periodEnd);
-        start.setValue(periodStart);
-        end.setValue(new Date(periodStart.getTime() + ONE_WEEK));
+
+        //default to last day
+        start.setValue(new Date(periodEnd.getTime() - DAY));
+        end.setValue(new Date());
+
         start.addValueChangeListener(e -> {
             long maxEnd = start.getValue().getTime() + ONE_WEEK;
             if (end.getValue().getTime() > maxEnd) {
