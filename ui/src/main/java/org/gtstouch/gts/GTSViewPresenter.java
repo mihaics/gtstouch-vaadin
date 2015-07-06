@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import org.gtstouch.app.AbstractPresenter;
 import org.gtstouch.jpa.AccountService;
 import org.gtstouch.jpa.JPATest;
+import org.gtstouch.service.AccountFacade;
+import org.gtstouch.service.UserFacade;
 
 /**
  *
@@ -16,7 +18,10 @@ import org.gtstouch.jpa.JPATest;
 public class GTSViewPresenter extends AbstractPresenter<GTSView> {
 
     @Inject
-    AccountService as;
+    AccountFacade af;
+    //AccountService as;
+    @Inject
+    UserFacade uf;
 
     @Override
     protected void onViewEnter() {
@@ -26,7 +31,8 @@ public class GTSViewPresenter extends AbstractPresenter<GTSView> {
     public void doSomething() {
         JPATest test = new JPATest();
 
-        int rez = as.getEntityCount();
+        int rez = af.count()+uf.count();
+       // int rez = as.getEntityCount();
 
         getView().setMessage("We did something at " + new Date() + " / " + rez);
 
