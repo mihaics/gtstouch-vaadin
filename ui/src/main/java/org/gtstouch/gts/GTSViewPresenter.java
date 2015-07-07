@@ -5,7 +5,6 @@ import java.util.Date;
 import com.vaadin.cdi.UIScoped;
 import javax.inject.Inject;
 import org.gtstouch.app.AbstractPresenter;
-import org.gtstouch.jpa.AccountService;
 import org.gtstouch.jpa.JPATest;
 import org.gtstouch.service.AccountFacade;
 import org.gtstouch.service.UserFacade;
@@ -25,7 +24,7 @@ public class GTSViewPresenter extends AbstractPresenter<GTSView> {
 
     @Override
     protected void onViewEnter() {
-
+        getView().showAccounts(af.findAll());
     }
 
     public void doSomething() {
@@ -38,4 +37,5 @@ public class GTSViewPresenter extends AbstractPresenter<GTSView> {
 
     }
 
+   
 }

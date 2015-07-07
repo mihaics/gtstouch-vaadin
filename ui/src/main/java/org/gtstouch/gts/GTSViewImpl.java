@@ -3,39 +3,41 @@ package org.gtstouch.gts;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-
 import org.vaadin.cdiviewmenu.ViewMenuItem;
 
-
 import com.vaadin.cdi.CDIView;
+import com.vaadin.event.FieldEvents;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Label;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.themes.ValoTheme;
+import java.util.Collection;
 import org.gtstouch.app.AbstractView;
+import org.gtstouch.model.Account;
 
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
 @CDIView(GTSView.ID)
-@ViewMenuItem(title="GTS Application")
+@ViewMenuItem(title = "GTS Application")
 public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
         GTSView {
 
     @Inject
     private Instance<GTSViewPresenter> presenterInstance;
 
-    private Label state = new Label("Initial");
-    
+    private AccountGrid grid;
+    private Button bnewAccount;
+
     public GTSViewImpl() {
-    	state.setCaption("State:");
-    	Button action = new Button("Do something", new ClickListener() {
-			
-			@Override
-			public void buttonClick(ClickEvent event) {
-				getPresenter().doSomething();
-			}
-		});
-		setCompositionRoot(new MVerticalLayout(state, action));
+
+        HorizontalLayout topLayout = createTopBar();
+         grid = new AccountGrid();
+         grid.setEditorEnabled(true);
+        setCompositionRoot(new MVerticalLayout(topLayout,grid));
     }
 
     @Override
@@ -43,8 +45,51 @@ public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
         return presenterInstance.get();
     }
 
-	@Override
-	public void setMessage(String message) {
-		state.setValue(message);
-	}
+    @Override
+    public void setMessage(String message) {
+
+    }
+
+    public HorizontalLayout createTopBar() {
+        TextField filter = new TextField();
+        filter.setStyleName("filter-textfield");
+        filter.setInputPrompt("Filter");
+      // ResetButtonForTextField.extend(filter);
+        filter.setImmediate(true);
+        filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
+            @Override
+            public void textChange(FieldEvents.TextChangeEvent event) {
+                grid.setFilter(event.getText());
+            }
+        });
+
+        bnewAccount = new Button("New Account");
+        bnewAccount.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        bnewAccount.setIcon(FontAwesome.PLUS_CIRCLE);
+        bnewAccount.addClickListener(new ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+                newAccount();
+            }
+        });
+
+        HorizontalLayout topLayout = new HorizontalLayout();
+        topLayout.setSpacing(true);
+        topLayout.setWidth("100%");
+        topLayout.addComponent(filter);
+        topLayout.addComponent(bnewAccount);
+        topLayout.setComponentAlignment(filter, Alignment.MIDDLE_LEFT);
+        topLayout.setExpandRatio(filter, 1);
+        topLayout.setStyleName("top-bar");
+        return topLayout;
+    }
+
+    public void showAccounts(Collection<Account> accounts) {
+        grid.setAccounts(accounts);
+    }
+    
+    @Override
+    public void newAccount() {
+      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
