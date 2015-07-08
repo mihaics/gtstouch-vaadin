@@ -22,8 +22,11 @@ TODO:
 
 Build should be IDE/platform indendent. So just
 
- * (OPTIONAL) define a datasource and configure it in ```backend/src/main/resources/META-INF/persistence.xml```. Development friendly Java EE servers like TomEE, WildFly and GlassFish will do this automatically for you, as we haven't defined ```<jta-data-source>``` in ```persistence.xml```
+ *  define a datasource and configure it in ```src/main/resources/META-INF/persistence.xml```. Defined ```<jta-data-source>``` in ```persistence.xml``` is ```opengts```
  * Build + Run/Debug in your favorite IDE
- * ... or use ```mvn install; cd ui; mvn tomee:run``` to launch it in TomEE without any configuration
+ * ... or use ```mvn install; cd ui; mvn tomee:run``` to launch it in TomEE
+ * nice to have: already populated opengts database
+ 
+ 
 
 
