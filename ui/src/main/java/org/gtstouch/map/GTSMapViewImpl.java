@@ -20,7 +20,7 @@ import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
 @CDIView(GTSMapView.ID)
-@ViewMenuItem(icon = FontAwesome.LIFE_BOUY)
+@ViewMenuItem(title = "GTS Map", icon = FontAwesome.LIFE_BOUY)
 public final class GTSMapViewImpl extends AbstractView<GTSMapViewPresenter> implements GTSMapView {
 
     @Inject

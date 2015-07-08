@@ -48,6 +48,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.findByLastUpdateTime", query = "SELECT u FROM User u WHERE u.lastUpdateTime = :lastUpdateTime"),
     @NamedQuery(name = "User.findByCreationTime", query = "SELECT u FROM User u WHERE u.creationTime = :creationTime")})
 public class User implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected UserPK userPK;
@@ -318,5 +319,5 @@ public class User implements Serializable {
     public String toString() {
         return "org.gtstouch.model.User[ userPK=" + userPK + " ]";
     }
-    
+
 }

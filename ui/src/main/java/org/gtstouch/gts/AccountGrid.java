@@ -12,7 +12,6 @@ import com.vaadin.ui.Grid;
 import java.util.Collection;
 import org.gtstouch.model.Account;
 
-
 /**
  *
  * @author mihai
@@ -28,6 +27,7 @@ public class AccountGrid extends Grid {
         setColumnOrder("accountID", "notifyEmail", "password", "contactName",
                 "contactPhone", "contactEmail");
         setColumnReorderingAllowed(true);
+        setFrozenColumnCount(1);
 
     }
 

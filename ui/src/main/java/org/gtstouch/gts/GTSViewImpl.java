@@ -22,7 +22,7 @@ import org.gtstouch.model.Account;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
 @CDIView(GTSView.ID)
-@ViewMenuItem(title = "GTS Application")
+@ViewMenuItem(title = "GTS Account")
 public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
         GTSView {
 
@@ -35,9 +35,9 @@ public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
     public GTSViewImpl() {
 
         HorizontalLayout topLayout = createTopBar();
-         grid = new AccountGrid();
-         grid.setEditorEnabled(true);
-        setCompositionRoot(new MVerticalLayout(topLayout,grid));
+        grid = new AccountGrid();
+        grid.setEditorEnabled(true);
+        setCompositionRoot(new MVerticalLayout(topLayout, grid));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
         TextField filter = new TextField();
         filter.setStyleName("filter-textfield");
         filter.setInputPrompt("Filter");
-      // ResetButtonForTextField.extend(filter);
+        // ResetButtonForTextField.extend(filter);
         filter.setImmediate(true);
         filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
             @Override
@@ -87,9 +87,9 @@ public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
     public void showAccounts(Collection<Account> accounts) {
         grid.setAccounts(accounts);
     }
-    
+
     @Override
     public void newAccount() {
-      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -5,7 +5,6 @@ import java.util.Date;
 import com.vaadin.cdi.UIScoped;
 import javax.inject.Inject;
 import org.gtstouch.app.AbstractPresenter;
-import org.gtstouch.jpa.JPATest;
 import org.gtstouch.service.AccountFacade;
 import org.gtstouch.service.UserFacade;
 
@@ -27,15 +26,4 @@ public class GTSViewPresenter extends AbstractPresenter<GTSView> {
         getView().showAccounts(af.findAll());
     }
 
-    public void doSomething() {
-        JPATest test = new JPATest();
-
-        int rez = af.count()+uf.count();
-       // int rez = as.getEntityCount();
-
-        getView().setMessage("We did something at " + new Date() + " / " + rez);
-
-    }
-
-   
 }
