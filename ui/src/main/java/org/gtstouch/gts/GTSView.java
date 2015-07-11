@@ -1,5 +1,6 @@
 package org.gtstouch.gts;
 
+import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import java.util.Collection;
 import org.gtstouch.app.ApplicationView;
 import org.gtstouch.model.Account;
@@ -13,5 +14,7 @@ public interface GTSView extends ApplicationView<GTSViewPresenter> {
     void newAccount();
 
     public void showAccounts(Collection<Account> accounts);
+
+    public void setGridFieldGroup(BeanFieldGroup<Account> bfg);
 
 }

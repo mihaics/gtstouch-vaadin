@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import org.vaadin.cdiviewmenu.ViewMenuItem;
 
 import com.vaadin.cdi.CDIView;
+import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
@@ -87,9 +88,16 @@ public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
     public void showAccounts(Collection<Account> accounts) {
         grid.setAccounts(accounts);
     }
+    
+    
 
     @Override
     public void newAccount() {
         //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setGridFieldGroup(BeanFieldGroup<Account> bfg) {
+        grid.setEditorFieldGroup(bfg);
     }
 }
