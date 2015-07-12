@@ -90,7 +90,7 @@ public class User implements Serializable {
     @Column(name = "passwdQueryTime")
     private Integer passwdQueryTime;
     @Column(name = "lastLoginTime")
-    private Integer lastLoginTime;
+    private long lastLoginTime;
     @Column(name = "isActive")
     private Short isActive;
     @Size(max = 40)
@@ -239,11 +239,11 @@ public class User implements Serializable {
         this.passwdQueryTime = passwdQueryTime;
     }
 
-    public Integer getLastLoginTime() {
+    public long getLastLoginTime() {
         return lastLoginTime;
     }
 
-    public void setLastLoginTime(Integer lastLoginTime) {
+    public void setLastLoginTime(long lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
 

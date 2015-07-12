@@ -1,15 +1,11 @@
 package org.gtstouch.gts;
 
-import java.util.Date;
 
 import com.vaadin.cdi.UIScoped;
-import com.vaadin.data.Item;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitHandler;
 import com.vaadin.data.util.BeanItem;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.gtstouch.app.AbstractPresenter;
 import org.gtstouch.model.Account;
@@ -33,7 +29,7 @@ public class GTSViewPresenter extends AbstractPresenter<GTSView> {
 
     @Override
     protected void onViewEnter() {
-
+        //this should be done outside view enter, only once
         bfg.addCommitHandler(new CommitHandler() {
 
             @Override
