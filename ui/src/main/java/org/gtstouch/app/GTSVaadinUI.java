@@ -47,6 +47,7 @@ public class GTSVaadinUI extends ViewMenuUI {
         public void buttonClick(ClickEvent event) {
             SecurityUtils.getSubject().logout();
             VaadinSession.getCurrent().close();
+            userIndex = null;
             Page.getCurrent().setLocation("");
         }
     };

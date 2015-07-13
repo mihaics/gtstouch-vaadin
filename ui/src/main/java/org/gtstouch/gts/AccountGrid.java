@@ -58,7 +58,7 @@ public class AccountGrid extends Grid {
             MethodProperty ac = (MethodProperty) item.getItemProperty("accountID");
             ac.fireValueChange();
         } else {
-            // New product
+            // New account
             getContainer().addBean(account);
         }
     }
