@@ -25,32 +25,15 @@ public class GTSViewPresenter extends AbstractPresenter<GTSView> {
     @Inject
     UserFacade uf;
 
-    BeanFieldGroup<Account> bfg = new BeanFieldGroup<>(Account.class);
+   
 
     @Override
     protected void onViewEnter() {
         //this should be done outside view enter, only once
-        bfg.addCommitHandler(new CommitHandler() {
-
-            @Override
-            public void preCommit(FieldGroup.CommitEvent commitEvent) {
-                //initial item
-                // Item rez = commitEvent.getFieldBinder().getItemDataSource();
-
-                // Logger.getLogger("GTSViewPresenter").log(Level.INFO, "Precommit: "+rez.toString()); 
-            }
-
-            @Override
-            public void postCommit(FieldGroup.CommitEvent commitEvent) {
-                //modified item
-                BeanItem<Account> rez = (BeanItem<Account>) commitEvent.getFieldBinder().getItemDataSource();
-
-                //  Logger.getLogger("GTSViewPresenter").log(Level.INFO,"Postcommit: "+rez.toString()); //To change body of generated methods, choose Tools | Templates.
-                af.edit(rez.getBean());
-            }
-
-        });
-        getView().setGridFieldGroup(bfg);
-        getView().showAccounts(af.findAll());
+          getView().showAccounts(af.findAll());
     }
+    
+     public void editAccount(Account accountBean){
+         af.edit(accountBean);
+     }
 }

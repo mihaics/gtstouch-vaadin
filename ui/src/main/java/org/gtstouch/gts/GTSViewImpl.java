@@ -7,6 +7,9 @@ import org.vaadin.cdiviewmenu.ViewMenuItem;
 
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup.CommitHandler;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
@@ -32,12 +35,38 @@ public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
 
     private AccountGrid grid;
     private Button bnewAccount;
-
+    BeanFieldGroup<Account> bfg = new BeanFieldGroup<>(Account.class);
+    
+    
     public GTSViewImpl() {
 
         HorizontalLayout topLayout = createTopBar();
         grid = new AccountGrid();
         grid.setEditorEnabled(true);
+        
+         bfg.addCommitHandler(new CommitHandler() {
+
+            @Override
+            public void preCommit(FieldGroup.CommitEvent commitEvent) {
+                //initial item
+                // Item rez = commitEvent.getFieldBinder().getItemDataSource();
+
+                // Logger.getLogger("GTSViewPresenter").log(Level.INFO, "Precommit: "+rez.toString()); 
+            }
+
+            @Override
+            public void postCommit(FieldGroup.CommitEvent commitEvent) {
+                //modified item
+                BeanItem<Account> rez = (BeanItem<Account>) commitEvent.getFieldBinder().getItemDataSource();
+
+                //  Logger.getLogger("GTSViewPresenter").log(Level.INFO,"Postcommit: "+rez.toString()); //To change body of generated methods, choose Tools | Templates.
+                presenterInstance.get().editAccount(rez.getBean());
+                
+            }
+
+        });
+        
+        setGridFieldGroup(bfg);
         setCompositionRoot(new MVerticalLayout(topLayout, grid));
     }
 

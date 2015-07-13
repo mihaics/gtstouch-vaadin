@@ -16,5 +16,7 @@ public interface GTSView extends ApplicationView<GTSViewPresenter> {
     public void showAccounts(Collection<Account> accounts);
 
     public void setGridFieldGroup(BeanFieldGroup<Account> bfg);
+   
+    
 
 }
