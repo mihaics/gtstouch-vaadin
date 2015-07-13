@@ -18,7 +18,7 @@ TODO:
  * Localization
  * Clean up, blog posts etc.
 
-## To get started (plaining with this app in your dev environment):
+## To get started (playing with this app in your dev environment):
 
 Build should be IDE/platform indendent. So just
 
