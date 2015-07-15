@@ -36,22 +36,21 @@ public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
     private AccountGrid grid;
     private Button bnewAccount;
     BeanFieldGroup<Account> bfg = new BeanFieldGroup<>(Account.class);
-    
-    
+
     public GTSViewImpl() {
 
         HorizontalLayout topLayout = createTopBar();
         grid = new AccountGrid();
         grid.setEditorEnabled(true);
-        
-         bfg.addCommitHandler(new CommitHandler() {
+
+        bfg.addCommitHandler(new CommitHandler() {
 
             @Override
             public void preCommit(FieldGroup.CommitEvent commitEvent) {
                 //initial item
                 // Item rez = commitEvent.getFieldBinder().getItemDataSource();
 
-                // Logger.getLogger("GTSViewPresenter").log(Level.INFO, "Precommit: "+rez.toString()); 
+                // Logger.getLogger("GTSViewPresenter").log(Level.INFO, "Precommit: "+rez.toString());
             }
 
             @Override
@@ -61,11 +60,11 @@ public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
 
                 //  Logger.getLogger("GTSViewPresenter").log(Level.INFO,"Postcommit: "+rez.toString()); //To change body of generated methods, choose Tools | Templates.
                 presenterInstance.get().editAccount(rez.getBean());
-                
+
             }
 
         });
-        
+
         setGridFieldGroup(bfg);
         setCompositionRoot(new MVerticalLayout(topLayout, grid));
     }
@@ -117,12 +116,13 @@ public class GTSViewImpl extends AbstractView<GTSViewPresenter> implements
     public void showAccounts(Collection<Account> accounts) {
         grid.setAccounts(accounts);
     }
-    
-    
 
     @Override
     public void newAccount() {
         //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Account account = new Account();
+        grid.refresh(account);
+
     }
 
     @Override

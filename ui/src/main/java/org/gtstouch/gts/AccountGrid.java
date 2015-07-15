@@ -62,6 +62,7 @@ public class AccountGrid extends Grid {
         } else {
             // New account
             getContainer().addBean(account);
+            editItem(account);
         }
     }
 
