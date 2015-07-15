@@ -8,6 +8,8 @@ package org.gtstouch.gts;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.MethodProperty;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.Grid;
 import java.util.Collection;
 import org.gtstouch.model.Account;
@@ -63,7 +65,18 @@ public class AccountGrid extends Grid {
         }
     }
 
-    void setFilter(String text) {
+    void setFilter(String filterString) {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getContainer().removeAllContainerFilters();
+        if (filterString.length() > 0) {
+            SimpleStringFilter nameFilter = new SimpleStringFilter(
+                    "accountID", filterString, true, false);
+            SimpleStringFilter availabilityFilter = new SimpleStringFilter(
+                    "contactName", filterString, true, false);
+            SimpleStringFilter categoryFilter = new SimpleStringFilter(
+                    "contactEmail", filterString, true, false);
+            getContainer().addContainerFilter(
+                    new Or(nameFilter, availabilityFilter, categoryFilter));
+        }
     }
 }
