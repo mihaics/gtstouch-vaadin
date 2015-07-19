@@ -78,4 +78,8 @@ public class EventDataGrid extends Grid {
                     new Or(nameFilter, availabilityFilter));
         }
     }
+
+    void setEventData(Collection<EventData> events) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
