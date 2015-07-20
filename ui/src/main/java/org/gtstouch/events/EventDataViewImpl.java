@@ -6,20 +6,20 @@ import javax.inject.Inject;
 import org.vaadin.cdiviewmenu.ViewMenuItem;
 
 import com.vaadin.cdi.CDIView;
+import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitHandler;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.event.FieldEvents;
-import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.PopupDateField;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.themes.ValoTheme;
 import java.util.Collection;
+import java.util.Date;
 import org.gtstouch.app.AbstractView;
 
 import org.gtstouch.model.EventData;
@@ -35,7 +35,17 @@ public class EventDataViewImpl extends AbstractView<EventDataViewPresenter> impl
     private Instance<EventDataViewPresenter> presenterInstance;
 
     private EventDataGrid grid;
-    private Button bnewGPSEvent;
+
+    PopupDateField start = new PopupDateField("From");
+    PopupDateField end = new PopupDateField("To");
+
+    static final long DAY = 24 * 60 * 60 * 1000;
+    static final long ONE_WEEK = 7 * DAY;
+    static final long ONE_HOUR = 60 * 60 * 1000;
+
+    static final Date periodEnd = new Date();
+    static final Date periodStart = new Date(2014, 1, 1);
+
     BeanFieldGroup<EventData> bfg = new BeanFieldGroup<>(EventData.class);
 
     public EventDataViewImpl() {
@@ -60,8 +70,7 @@ public class EventDataViewImpl extends AbstractView<EventDataViewPresenter> impl
                 BeanItem<EventData> rez = (BeanItem<EventData>) commitEvent.getFieldBinder().getItemDataSource();
 
                 //  Logger.getLogger("GTSViewPresenter").log(Level.INFO,"Postcommit: "+rez.toString()); //To change body of generated methods, choose Tools | Templates.
-               // presenterInstance.get().editAccount(rez.getBean());
-
+                // presenterInstance.get().editAccount(rez.getBean());
             }
 
         });
@@ -81,6 +90,7 @@ public class EventDataViewImpl extends AbstractView<EventDataViewPresenter> impl
     }
 
     public HorizontalLayout createTopBar() {
+        prepareDateRangeSelector();
         TextField filter = new TextField();
         filter.setStyleName("filter-textfield");
         filter.setInputPrompt("Filter");
@@ -93,21 +103,12 @@ public class EventDataViewImpl extends AbstractView<EventDataViewPresenter> impl
             }
         });
 
-        bnewGPSEvent = new Button("New GPSEvent");
-        bnewGPSEvent.addStyleName(ValoTheme.BUTTON_PRIMARY);
-        bnewGPSEvent.setIcon(FontAwesome.PLUS_CIRCLE);
-        bnewGPSEvent.addClickListener(new ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                newGPSEvent();
-            }
-        });
-
         HorizontalLayout topLayout = new HorizontalLayout();
         topLayout.setSpacing(true);
         topLayout.setWidth("100%");
         topLayout.addComponent(filter);
-        topLayout.addComponent(bnewGPSEvent);
+        topLayout.addComponent(start);
+        topLayout.addComponent(end);
         topLayout.setComponentAlignment(filter, Alignment.MIDDLE_LEFT);
         topLayout.setExpandRatio(filter, 1);
         topLayout.setStyleName("top-bar");
@@ -118,29 +119,55 @@ public class EventDataViewImpl extends AbstractView<EventDataViewPresenter> impl
         grid.setEventData(events);
     }
 
- 
-    
-
-   
     public void setGridFieldGroup(BeanFieldGroup<EventData> bfg) {
         grid.setEditorFieldGroup(bfg);
     }
 
-   
-
     @Override
     public void showGPSEvents(Collection<EventData> events) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-         grid.setEventData(events);
+        grid.setEventData(events);
     }
 
     @Override
     public void newGPSEvent() {
-        
-         EventData event = new EventData();
+
+        EventData event = new EventData();
         grid.refresh(event);
     }
 
+    protected void prepareDateRangeSelector() throws Property.ReadOnlyException, Converter.ConversionException {
+        start.setResolution(Resolution.MINUTE);
+        end.setResolution(Resolution.MINUTE);
+        /*
+         * set data range for component validation
+         */
+        // start.setRangeStart(periodStart);
+        start.setRangeEnd(periodEnd);
+        //  end.setRangeStart(periodStart);
+        end.setRangeEnd(periodEnd);
 
-   
+        //default to last day
+        start.setValue(new Date(periodEnd.getTime() - DAY));
+        end.setValue(new Date());
+
+        start.addValueChangeListener(e -> {
+            long maxEnd = start.getValue().getTime() + ONE_WEEK;
+            if (end.getValue().getTime() > maxEnd) {
+                end.setValue(new Date(maxEnd));
+            } else if (end.getValue().getTime() < start.getValue().getTime()) {
+                end.setValue(new Date(start.getValue().getTime() + DAY));
+            }
+            // drawRoute();
+        });
+        end.addValueChangeListener(e -> {
+            long minStart = end.getValue().getTime() - ONE_WEEK;
+            if (start.getValue().getTime() < minStart) {
+                start.setValue(new Date(minStart));
+            } else if (start.getValue().getTime() > end.getValue().getTime()) {
+                start.setValue(new Date(end.getValue().getTime() - DAY));
+            }
+            // drawRoute();
+        });
+    }
 }

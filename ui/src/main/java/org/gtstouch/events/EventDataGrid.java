@@ -26,8 +26,9 @@ public class EventDataGrid extends Grid {
         setSelectionMode(SelectionMode.SINGLE);
         BeanItemContainer<EventData> container = new BeanItemContainer<>(EventData.class);
         setContainerDataSource(container);
-        // setColumnOrder("accountID", "notifyEmail", "password", "contactName",
-        //       "contactPhone", "contactEmail");
+        setColumns("eventDataPK", "address", "speedKPH", "odometerKM",
+                "distanceKM", "latitude", "longitude");
+
         setColumnReorderingAllowed(true);
         setFrozenColumnCount(1);
 
