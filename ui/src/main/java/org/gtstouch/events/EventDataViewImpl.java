@@ -52,7 +52,7 @@ public class EventDataViewImpl extends AbstractView<EventDataViewPresenter> impl
 
         HorizontalLayout topLayout = createTopBar();
         grid = new EventDataGrid();
-        grid.setEditorEnabled(true);
+        grid.setEditorEnabled(false);
 
         bfg.addCommitHandler(new CommitHandler() {
 

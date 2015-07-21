@@ -30,7 +30,7 @@ public class EventDataGrid extends Grid {
                 "distanceKM", "latitude", "longitude");
 
         setColumnReorderingAllowed(true);
-        setFrozenColumnCount(1);
+        setFrozenColumnCount(2);
 
     }
 
@@ -43,11 +43,6 @@ public class EventDataGrid extends Grid {
         return (EventData) super.getSelectedRow();
     }
 
-    public void setAccounts(Collection<EventData> events) {
-        getContainer().removeAllItems();
-        getContainer().addAll(events);
-    }
-
     public void remove(EventData event) {
         getContainer().removeItem(event);
     }
@@ -58,7 +53,7 @@ public class EventDataGrid extends Grid {
         BeanItem<EventData> item = getContainer().getItem(event);
         if (item != null) {
             // Updated product
-            MethodProperty ac = (MethodProperty) item.getItemProperty("deviceID");
+            MethodProperty ac = (MethodProperty) item.getItemProperty("eventDataPK");
             ac.fireValueChange();
         } else {
             // New account
@@ -74,13 +69,14 @@ public class EventDataGrid extends Grid {
             SimpleStringFilter nameFilter = new SimpleStringFilter(
                     "address", filterString, true, false);
             SimpleStringFilter availabilityFilter = new SimpleStringFilter(
-                    "deviceID", filterString, true, false);
+                    "speedKPH", filterString, true, false);
             getContainer().addContainerFilter(
                     new Or(nameFilter, availabilityFilter));
         }
     }
 
     void setEventData(Collection<EventData> events) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        getContainer().removeAllItems();
+        getContainer().addAll(events);
     }
 }

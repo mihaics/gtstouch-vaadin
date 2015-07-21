@@ -5,6 +5,7 @@
  */
 package org.gtstouch.service;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,6 +17,7 @@ import org.gtstouch.model.EventData;
  */
 @Stateless
 public class EventDataFacade extends AbstractFacade<EventData> {
+
     @PersistenceContext(unitName = "gtstouchPU")
     private EntityManager em;
 
@@ -27,5 +29,12 @@ public class EventDataFacade extends AbstractFacade<EventData> {
     public EventDataFacade() {
         super(EventData.class);
     }
-    
+
+    public List<EventData> findByAccountID(String accountID) {
+
+        javax.persistence.Query q = getEntityManager().createNamedQuery("EventData.findByAccountID");
+        q.setParameter("accountID", accountID);
+        return q.getResultList();
+    }
+
 }
