@@ -7,6 +7,7 @@ package org.gtstouch.events;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.data.util.MethodProperty;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
@@ -26,8 +27,6 @@ public class EventDataGrid extends Grid {
         setSelectionMode(SelectionMode.SINGLE);
         BeanItemContainer<EventData> container = new BeanItemContainer<>(EventData.class);
         setContainerDataSource(container);
-        setColumns("eventDataPK", "address", "speedKPH", "odometerKM",
-                "distanceKM", "latitude", "longitude");
 
         setColumnReorderingAllowed(true);
         setFrozenColumnCount(2);
@@ -69,14 +68,19 @@ public class EventDataGrid extends Grid {
             SimpleStringFilter nameFilter = new SimpleStringFilter(
                     "address", filterString, true, false);
             SimpleStringFilter availabilityFilter = new SimpleStringFilter(
-                    "speedKPH", filterString, true, false);
+                    "eventDataPK.deviceID", filterString, true, false);
             getContainer().addContainerFilter(
                     new Or(nameFilter, availabilityFilter));
         }
     }
 
     void setEventData(Collection<EventData> events) {
+
         getContainer().removeAllItems();
+        getContainer().addNestedContainerBean("eventDataPK");
         getContainer().addAll(events);
+        setColumns("eventDataPK.deviceID", "address", "speedKPH", "odometerKM",
+                "distanceKM", "latitude", "longitude");
+
     }
 }

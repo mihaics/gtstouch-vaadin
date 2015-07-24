@@ -37,4 +37,24 @@ public class EventDataFacade extends AbstractFacade<EventData> {
         return q.getResultList();
     }
 
+    public List<EventData> findByDeviceID(String deviceID) {
+
+        javax.persistence.Query q = getEntityManager().createNamedQuery("EventData.findByDeviceID");
+        q.setParameter("deviceID", deviceID);
+        return q.getResultList();
+    }
+
+    public List<EventData> findByTimestamp(int timestamp) {
+
+        javax.persistence.Query q = getEntityManager().createNamedQuery("EventData.findByTimestamp");
+        q.setParameter("timestamp", timestamp);
+        return q.getResultList();
+    }
+
+    public List<EventData> findByAddress(String address) {
+
+        javax.persistence.Query q = getEntityManager().createNamedQuery("EventData.findByAddress");
+        q.setParameter("address", address);
+        return q.getResultList();
+    }
 }

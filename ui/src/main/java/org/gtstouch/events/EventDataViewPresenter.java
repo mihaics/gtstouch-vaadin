@@ -18,9 +18,7 @@ public class EventDataViewPresenter extends AbstractPresenter<EventDataView> {
 
     @Override
     protected void onViewEnter() {
-        //this should be done outside view enter, only once
 
-        // getView().showGPSEvents(evf.findByAccountID(GTSVaadinUI.getApp().getAccountID()));
         getView().showGPSEvents(evf.findByAccountID(GTSVaadinUI.getApp().getAccountID()));
     }
 
