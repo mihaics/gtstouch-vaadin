@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
  */
 @Embeddable
 public class EventDataPK implements Serializable {
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 32)
@@ -115,5 +116,5 @@ public class EventDataPK implements Serializable {
     public String toString() {
         return "org.gtstouch.model.EventDataPK[ accountID=" + accountID + ", deviceID=" + deviceID + ", timestamp=" + timestamp + ", statusCode=" + statusCode + " ]";
     }
-    
+
 }

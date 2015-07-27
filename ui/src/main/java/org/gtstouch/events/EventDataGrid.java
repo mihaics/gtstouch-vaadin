@@ -7,12 +7,14 @@ package org.gtstouch.events;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.data.util.MethodProperty;
+import com.vaadin.data.util.converter.DateToLongConverter;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.renderers.DateRenderer;
 import java.util.Collection;
+import org.gtstouch.app.DateToUnixConverter;
 import org.gtstouch.model.EventData;
 
 /**
@@ -27,10 +29,12 @@ public class EventDataGrid extends Grid {
         setSelectionMode(SelectionMode.SINGLE);
         BeanItemContainer<EventData> container = new BeanItemContainer<>(EventData.class);
         setContainerDataSource(container);
-
+        getContainer().addNestedContainerBean("eventDataPK");
         setColumnReorderingAllowed(true);
         setFrozenColumnCount(2);
 
+        getColumn("eventDataPK.timestamp").setRenderer(new DateRenderer(), new DateToUnixConverter());
+        getColumn("creationTime").setRenderer(new DateRenderer(), new DateToUnixConverter());
     }
 
     private BeanItemContainer<EventData> getContainer() {
@@ -77,9 +81,8 @@ public class EventDataGrid extends Grid {
     void setEventData(Collection<EventData> events) {
 
         getContainer().removeAllItems();
-        getContainer().addNestedContainerBean("eventDataPK");
         getContainer().addAll(events);
-        setColumns("eventDataPK.deviceID", "address", "speedKPH", "odometerKM",
+        setColumns("eventDataPK.deviceID", "eventDataPK.timestamp", "creationTime", "address", "speedKPH", "odometerKM",
                 "distanceKM", "latitude", "longitude");
 
     }

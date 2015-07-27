@@ -48,6 +48,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "EventData.findByGeozoneID", query = "SELECT e FROM EventData e WHERE e.geozoneID = :geozoneID"),
     @NamedQuery(name = "EventData.findByCreationTime", query = "SELECT e FROM EventData e WHERE e.creationTime = :creationTime")})
 public class EventData implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected EventDataPK eventDataPK;
@@ -95,7 +96,7 @@ public class EventData implements Serializable {
     @Column(name = "geozoneID")
     private String geozoneID;
     @Column(name = "creationTime")
-    private Integer creationTime;
+    private int creationTime;
 
     public EventData() {
     }
@@ -260,11 +261,11 @@ public class EventData implements Serializable {
         this.geozoneID = geozoneID;
     }
 
-    public Integer getCreationTime() {
+    public int getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(Integer creationTime) {
+    public void setCreationTime(int creationTime) {
         this.creationTime = creationTime;
     }
 
@@ -292,5 +293,5 @@ public class EventData implements Serializable {
     public String toString() {
         return "org.gtstouch.model.EventData[ eventDataPK=" + eventDataPK + " ]";
     }
-    
+
 }
