@@ -28,7 +28,7 @@ public class UserService {
 
     public int updateLoginTime(String contactEmail, long time) {
         Query q = em.createQuery("update User u set u.lastLoginTime = :loginTime where u.contactEmail = :email");
-        q.setParameter("loginTime", time);
+        q.setParameter("loginTime", Integer.parseInt(Integer.toString(Math.round(time / 1000))));
         int rez = q.setParameter("email", contactEmail).executeUpdate();
         return rez;
 
