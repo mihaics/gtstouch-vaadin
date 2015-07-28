@@ -23,6 +23,8 @@ import java.util.Date;
 import org.gtstouch.app.AbstractView;
 
 import org.gtstouch.model.EventData;
+import org.vaadin.viritin.fields.MTextField;
+import org.vaadin.viritin.layouts.MHorizontalLayout;
 
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
@@ -89,10 +91,10 @@ public class EventDataViewImpl extends AbstractView<EventDataViewPresenter> impl
 
     }
 
-    public HorizontalLayout createTopBar() {
+    public MHorizontalLayout createTopBar() {
         prepareDateRangeSelector();
-        TextField filter = new TextField();
-        filter.setStyleName("filter-textfield");
+        MTextField filter = new MTextField("Filter");
+       // filter.setStyleName("filter-textfield");
         filter.setInputPrompt("Filter");
         // ResetButtonForTextField.extend(filter);
         filter.setImmediate(true);
@@ -103,15 +105,16 @@ public class EventDataViewImpl extends AbstractView<EventDataViewPresenter> impl
             }
         });
 
-        HorizontalLayout topLayout = new HorizontalLayout();
-        topLayout.setSpacing(true);
-        topLayout.setWidth("100%");
-        topLayout.addComponent(filter);
-        topLayout.addComponent(start);
-        topLayout.addComponent(end);
-        topLayout.setComponentAlignment(filter, Alignment.MIDDLE_LEFT);
-        topLayout.setExpandRatio(filter, 1);
-        topLayout.setStyleName("top-bar");
+        MHorizontalLayout topLayout = new MHorizontalLayout();
+       // topLayout.setSpacing(true);
+       // topLayout.setWidth("100%");
+        
+        topLayout.add(filter, start, end ).withFullWidth().withAlign(filter, Alignment.MIDDLE_LEFT);
+       // topLayout.addComponent(start);
+       // topLayout.addComponent(end);
+        //topLayout.setComponentAlignment(filter, Alignment.MIDDLE_LEFT);
+       // topLayout.setExpandRatio(filter, 1);
+       // topLayout.setStyleName("top-bar");
         return topLayout;
     }
 
